@@ -155,14 +155,14 @@ node index.js send
 
 **What happens:**
 1. Validates all configurations (files exist, not empty)
-2. For Tamil groups:
-   - Sends IMAGE + CAPTION to Tamil Group 1
-   - Waits 30-90 seconds (random)
-   - Repeats for all Tamil groups
-3. For English groups:
+2. For English groups:
    - Sends IMAGE + CAPTION to English Group 1
    - Waits 30-90 seconds (random)
    - Repeats for all English groups
+3. For Tamil groups:
+   - Sends IMAGE + CAPTION to Tamil Group 1
+   - Waits 30-90 seconds (random)
+   - Repeats for all Tamil groups
 4. Total time depends on number of groups (~1-2 minutes per group)
 
 ---
@@ -213,27 +213,32 @@ whatsapp-sender/
 
 ## ⚙️ Configuration
 
-You can modify the delays in [index.js](index.js) if needed:
+You can modify the delays and language order in [index.js](index.js) if needed:
 
 ```javascript
 const CONFIG = {
     minDelay: 30000,  // 30 seconds minimum
     maxDelay: 90000,  // 90 seconds maximum
 
-    languages: {
-        tamil: {
-            groupListFile: './groups-tamil-list.json',
-            folder: './tamil',
-            messageFile: 'tamil.txt'
-        },
-        english: {
+    // Language configurations (ordered - English first, then Tamil)
+    languages: [
+        {
+            name: 'english',
             groupListFile: './groups-english-list.json',
             folder: './english',
             messageFile: 'english.txt'
+        },
+        {
+            name: 'tamil',
+            groupListFile: './groups-tamil-list.json',
+            folder: './tamil',
+            messageFile: 'tamil.txt'
         }
-    }
+    ]
 };
 ```
+
+**Note:** Messages are sent in the order listed above (English first, then Tamil).
 
 ---
 

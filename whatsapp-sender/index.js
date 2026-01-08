@@ -10,19 +10,21 @@ const CONFIG = {
     minDelay: 30000,  // 30 seconds minimum
     maxDelay: 90000,  // 90 seconds maximum
 
-    // Language configurations
-    languages: {
-        tamil: {
-            groupListFile: './groups-tamil-list.json',
-            folder: './tamil',
-            messageFile: 'tamil.txt'
-        },
-        english: {
+    // Language configurations (ordered - English first, then Tamil)
+    languages: [
+        {
+            name: 'english',
             groupListFile: './groups-english-list.json',
             folder: './english',
             messageFile: 'english.txt'
+        },
+        {
+            name: 'tamil',
+            groupListFile: './groups-tamil-list.json',
+            folder: './tamil',
+            messageFile: 'tamil.txt'
         }
-    }
+    ]
 };
 
 // ============== MAIN CODE ==============
@@ -165,17 +167,17 @@ async function sendToAllLanguages() {
     const validationResults = {};
 
     // Validate all language configurations
-    for (const [lang, config] of Object.entries(CONFIG.languages)) {
-        console.log(`Checking ${lang.toUpperCase()} configuration:`);
-        const errors = validateLanguageConfig(lang, config);
+    for (const langConfig of CONFIG.languages) {
+        console.log(`Checking ${langConfig.name.toUpperCase()} configuration:`);
+        const errors = validateLanguageConfig(langConfig.name, langConfig);
 
         if (errors.length > 0) {
             hasErrors = true;
             errors.forEach(error => console.log(`  ${error}`));
-            validationResults[lang] = { valid: false, errors };
+            validationResults[langConfig.name] = { valid: false, errors };
         } else {
-            console.log(`  ✅ All files found for ${lang}`);
-            validationResults[lang] = { valid: true };
+            console.log(`  ✅ All files found for ${langConfig.name}`);
+            validationResults[langConfig.name] = { valid: true };
         }
         console.log('');
     }
@@ -192,13 +194,13 @@ async function sendToAllLanguages() {
     const chats = await client.getChats();
     const allGroups = chats.filter(chat => chat.isGroup);
 
-    // Send to each language
-    for (const [lang, config] of Object.entries(CONFIG.languages)) {
+    // Send to each language (English first, then Tamil)
+    for (const langConfig of CONFIG.languages) {
         console.log('═'.repeat(60));
-        console.log(`📨 Sending ${lang.toUpperCase()} messages`);
+        console.log(`📨 Sending ${langConfig.name.toUpperCase()} messages`);
         console.log('═'.repeat(60));
 
-        await sendToLanguageGroups(lang, config, allGroups);
+        await sendToLanguageGroups(langConfig.name, langConfig, allGroups);
         console.log('');
     }
 
