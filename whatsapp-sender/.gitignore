@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# WhatsApp authentication data (contains sensitive session data)
+.wwebjs_auth/
+.wwebjs_cache/
+
+# Generated group lists
+groups-list.json
+groups-list-bk-.json
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
