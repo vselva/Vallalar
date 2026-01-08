@@ -1,8 +1,8 @@
 # WhatsApp Daily Message Sender
 
-Send your daily spiritual images + text messages to multiple WhatsApp groups safely.
+Send daily spiritual images + text messages to multiple WhatsApp groups safely, with support for multiple languages.
 
-**Sends BOTH image and text message separately (like you currently do manually)**
+**Sends image with caption in a single message to each group**
 
 ---
 
@@ -27,14 +27,14 @@ You should see something like `v18.17.0` or higher.
 
 ## 🚀 Step-by-Step Setup
 
-### Step 1: Download the Project
+### Step 1: Download or Clone the Project
 
 Create a folder on your computer (e.g., `C:\whatsapp-sender` on Windows or `~/whatsapp-sender` on Mac/Linux)
 
-Place these files in the folder:
-- `index.js`
-- `package.json`
-- `daily-message.txt`
+The project should have these files:
+- `index.js` - Main script
+- `package.json` - Dependencies configuration
+- `README.md` - This file
 
 ### Step 2: Open Terminal/Command Prompt
 
@@ -55,7 +55,25 @@ npm install
 
 Wait for it to complete (may take 1-2 minutes).
 
-### Step 4: Get Your Group List
+### Step 4: Set Up Language Folders
+
+The script supports multiple languages. For each language, create a folder structure:
+
+```
+whatsapp-sender/
+├── tamil/
+│   ├── tamil.txt          # Your Tamil message
+│   └── [any-name].jpg     # Your Tamil image (any .jpg file)
+└── english/
+    ├── english.txt        # Your English message
+    └── [any-name].jpg     # Your English image (any .jpg file)
+```
+
+**Important:**
+- The message file must be named exactly as configured: `tamil.txt` or `english.txt`
+- The image can have any name, as long as it's a `.jpg` file
+
+### Step 5: Get Your Group List
 
 Run this command:
 ```
@@ -67,48 +85,59 @@ node index.js list
 3. Go to **Settings > Linked Devices > Link a Device**
 4. Scan the QR code
 5. Wait for "WhatsApp client is ready!"
-6. You'll see a list of all your groups
+6. You'll see a list of all your groups with their IDs
 
-### Step 5: Configure Your Groups
+The groups will be saved to `groups-list.json` for reference.
 
-Open `index.js` in any text editor (Notepad, VS Code, etc.)
+### Step 6: Configure Your Groups by Language
 
-Find this section and add your group names:
-```javascript
-const TARGET_GROUPS = [
-    'Group Name 1',
-    'Group Name 2',
-    'Group Name 3',
-    // Add all 13 group names here
-];
+Create two JSON files for your group lists:
+
+**`groups-tamil-list.json`** - Groups that should receive Tamil messages:
+```json
+[
+    {
+        "name": "Tamil Group 1",
+        "id": "1234567890-1234567890@g.us"
+    },
+    {
+        "name": "Tamil Group 2",
+        "id": "1234567890-1234567890@g.us"
+    }
+]
 ```
 
-**Example:**
-```javascript
-const TARGET_GROUPS = [
-    'வள்ளலார் குறுஞ்செய்திகள்',
-    'Spiritual Family',
-    'Tamil Devotional',
-    'Daily Quotes Group',
-    // ... add all your groups
-];
+**`groups-english-list.json`** - Groups that should receive English messages:
+```json
+[
+    {
+        "name": "English Group 1",
+        "id": "1234567890-1234567890@g.us"
+    },
+    {
+        "name": "English Group 2",
+        "id": "1234567890-1234567890@g.us"
+    }
+]
 ```
 
-**Note:** You don't need exact names - partial match works!
-- If your group is "🙏 வள்ளலார் குறுஞ்செய்திகள் 🙏"
-- You can just write "வள்ளலார் குறுஞ்செய்திகள்"
+Copy the exact group IDs from `groups-list.json` that was generated in Step 5.
 
 ---
 
 ## 📅 Daily Usage (Every Day)
 
-### Step 1: Update Your Image
-- Replace `daily-image.png` with your new image
-- Keep the same filename OR rename your new image to `daily-image.png`
+### Step 1: Update Your Tamil Content
+In the `tamil/` folder:
+- Update or replace the `.jpg` image file with today's Tamil image
+- Update `tamil.txt` with today's Tamil message
 
-### Step 2: Update Your Message
-Open `daily-message.txt` in Notepad and replace the content with today's message:
+### Step 2: Update Your English Content
+In the `english/` folder:
+- Update or replace the `.jpg` image file with today's English image
+- Update `english.txt` with today's English message
 
+**Example message format (tamil.txt):**
 ```
 பொது விதி - 9.4:
 
@@ -118,29 +147,57 @@ Open `daily-message.txt` in Notepad and replace the content with today's message
 (நித்திய கரும விதி - பொது விதி)
 ```
 
-### Step 3: Send
+### Step 3: Send Messages
 Open terminal/CMD in the folder and run:
 ```
 node index.js send
 ```
 
 **What happens:**
-1. Sends IMAGE to Group 1
-2. Sends TEXT MESSAGE to Group 1
-3. Waits 30-90 seconds (random)
-4. Repeats for all 13 groups
-5. Total time: ~10-15 minutes
+1. Validates all configurations (files exist, not empty)
+2. For Tamil groups:
+   - Sends IMAGE + CAPTION to Tamil Group 1
+   - Waits 30-90 seconds (random)
+   - Repeats for all Tamil groups
+3. For English groups:
+   - Sends IMAGE + CAPTION to English Group 1
+   - Waits 30-90 seconds (random)
+   - Repeats for all English groups
+4. Total time depends on number of groups (~1-2 minutes per group)
 
 ---
 
-## 📁 Files You Need Daily
+## 📁 Project Structure
 
-| File | Purpose |
-|------|---------|
-| `daily-image.png` | Your image for today |
-| `daily-message.txt` | Your text message for today |
+```
+whatsapp-sender/
+├── index.js                      # Main script
+├── package.json                  # Dependencies
+├── README.md                     # This file
+├── .gitignore                    # Git ignore rules
+├── groups-tamil-list.json        # Tamil groups configuration
+├── groups-english-list.json      # English groups configuration
+├── groups-list.json              # Generated list of all groups
+├── tamil/
+│   ├── tamil.txt                 # Daily Tamil message
+│   └── [date]-tamil.jpg          # Daily Tamil image
+├── english/
+│   ├── english.txt               # Daily English message
+│   └── [date]-english.jpg        # Daily English image
+├── .wwebjs_auth/                 # Auto-generated (WhatsApp session)
+└── .wwebjs_cache/                # Auto-generated (WhatsApp cache)
+```
 
-Just update these 2 files every day before running `node index.js send`
+---
+
+## 🎯 Features
+
+- **Multi-language Support**: Send different messages to different group sets
+- **Image with Caption**: Sends image and text as a single combined message
+- **Safety Delays**: Random delays (30-90 seconds) between groups
+- **Validation**: Checks all files before sending
+- **Easy Configuration**: Simple JSON files for group management
+- **Persistent Login**: Saves WhatsApp session (no need to scan QR every time)
 
 ---
 
@@ -150,6 +207,33 @@ Just update these 2 files every day before running `node index.js send`
 2. **Run manually** - don't set up auto-scheduling
 3. **Keep delays enabled** - don't reduce the delay times
 4. **Stop if you see warnings** from WhatsApp
+5. **Test first** with one or two groups before sending to all
+
+---
+
+## ⚙️ Configuration
+
+You can modify the delays in [index.js](index.js) if needed:
+
+```javascript
+const CONFIG = {
+    minDelay: 30000,  // 30 seconds minimum
+    maxDelay: 90000,  // 90 seconds maximum
+
+    languages: {
+        tamil: {
+            groupListFile: './groups-tamil-list.json',
+            folder: './tamil',
+            messageFile: 'tamil.txt'
+        },
+        english: {
+            groupListFile: './groups-english-list.json',
+            folder: './english',
+            messageFile: 'english.txt'
+        }
+    }
+};
+```
 
 ---
 
@@ -158,37 +242,48 @@ Just update these 2 files every day before running `node index.js send`
 ### "QR code keeps appearing"
 - Delete the `.wwebjs_auth` folder and try again
 - Make sure WhatsApp is open on your phone
+- Ensure your phone has a stable internet connection
 
 ### "Group not found"
-- Run `node index.js list` to see exact group names
-- Check spelling in TARGET_GROUPS
+- Run `node index.js list` to get the latest group list
+- Check that the group IDs in your JSON files are correct
+- Make sure you copied the exact ID from `groups-list.json`
 
-### "Image not found"
-- Make sure the image is in the same folder
-- Check the filename matches CONFIG.imagePath
+### "Image not found" or "Message file not found"
+- Check that the folder exists: `tamil/` or `english/`
+- Ensure the message file is named correctly: `tamil.txt` or `english.txt`
+- Verify there's at least one `.jpg` file in the folder
+
+### "Message file is empty"
+- Open the text file and add your message
+- Make sure you saved the file after editing
 
 ### "puppeteer error" (common on first install)
-Run these commands:
+Run this command:
 ```
 npm install puppeteer --save
 ```
 
-If on Linux, you may need:
+If on Linux, you may need additional dependencies:
 ```
 sudo apt-get install -y libgbm-dev
 ```
 
+### Commands not working on Windows
+Make sure you're using Command Prompt (CMD) or PowerShell, not Git Bash.
+
 ---
 
-## 📁 Files Explained
+## 📝 npm Scripts
 
-```
-whatsapp-sender/
-├── index.js          # Main script
-├── package.json      # Dependencies
-├── daily-image.png   # Your image (add this)
-├── groups-list.json  # Auto-generated group list
-└── .wwebjs_auth/     # Auto-generated login data (don't delete)
+For convenience, you can also use npm scripts:
+
+```bash
+# List all groups
+npm run list
+
+# Send messages
+npm run send
 ```
 
 ---
