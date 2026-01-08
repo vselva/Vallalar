@@ -7,8 +7,8 @@ const path = require('path');
 const CONFIG = {
     // Delay between groups (in milliseconds)
     // Random delay between minDelay and maxDelay for safety
-    minDelay: 30000,  // 30 seconds minimum
-    maxDelay: 90000,  // 90 seconds maximum
+    minDelay: 15000,  // 15 seconds minimum
+    maxDelay: 30000,  // 30 seconds maximum
 
     // Language configurations (ordered - English first, then Tamil)
     languages: [

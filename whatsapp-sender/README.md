@@ -155,15 +155,15 @@ node index.js send
 
 **What happens:**
 1. Validates all configurations (files exist, not empty)
-2. For English groups:
+2. For English groups (13 groups):
    - Sends IMAGE + CAPTION to English Group 1
-   - Waits 30-90 seconds (random)
-   - Repeats for all English groups
-3. For Tamil groups:
+   - Waits 15-30 seconds (random)
+   - Repeats for all English groups (~3-6 minutes)
+3. For Tamil groups (12 groups):
    - Sends IMAGE + CAPTION to Tamil Group 1
-   - Waits 30-90 seconds (random)
-   - Repeats for all Tamil groups
-4. Total time depends on number of groups (~1-2 minutes per group)
+   - Waits 15-30 seconds (random)
+   - Repeats for all Tamil groups (~3-6 minutes)
+4. Total time: ~6-12 minutes for all 25 groups
 
 ---
 
@@ -217,8 +217,8 @@ You can modify the delays and language order in [index.js](index.js) if needed:
 
 ```javascript
 const CONFIG = {
-    minDelay: 30000,  // 30 seconds minimum
-    maxDelay: 90000,  // 90 seconds maximum
+    minDelay: 15000,  // 15 seconds minimum
+    maxDelay: 30000,  // 30 seconds maximum
 
     // Language configurations (ordered - English first, then Tamil)
     languages: [
@@ -238,7 +238,7 @@ const CONFIG = {
 };
 ```
 
-**Note:** Messages are sent in the order listed above (English first, then Tamil).
+**Note:** Messages are sent in the order listed above (English first, then Tamil). The 15-30 second delay provides a good balance between speed (~6-12 minutes total) and safety against WhatsApp spam detection.
 
 ---
 
